@@ -1,0 +1,35 @@
+@startuml
+
+title Package Summary\n
+
+package group {
+  class Group {
+    - Id
+    - Name
+    - Description
+  }
+}
+
+package user {
+  class User {
+    - Id
+    - Name
+    - Status
+  }
+  enum Status {
+    Active | Inactive
+  }
+}
+
+package item {
+  class Item {
+    - Id
+    - Name
+  }
+}
+
+Group -r-> "*" User
+User -d-> Status
+User -r-> "*" Item
+
+@enduml
