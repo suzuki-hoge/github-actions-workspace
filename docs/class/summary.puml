@@ -1,35 +1,54 @@
 @startuml
 
-title Package Summary\n
+title Monadic container type which represents an optional value.
 
-package group {
-  class Group {
-    - Id
-    - Name
-    - Description
+package Option {
+  interface Option {
+    + map($f): Option
+    + filter($p): Option
+    + flatMap($f): Option
   }
+
+  Some -u-|> Option
+  None -u-|> Option
 }
 
-package user {
-  class User {
-    - Id
-    - Name
-    - Status
+newpage
+
+title Monadic container type which represents a sequence of elements.
+
+package LinearList {
+  abstract LinearList {
+    {abstract} + map($f): LinearList
+    {abstract} + filter($p): LinearList
+    {abstract} + flatMap($f): LinearList
+    {abstract} + prepend($f): LinearList
+    {static} + of(array $vs): LinearList
+    {static} + empty(): LinearList
   }
-  enum Status {
-    Active | Inactive
+
+  class Cons {
+    {static} - rec($f, LinerList $l, LinerList $acc): LinearList
+    {static} - reverse(LinerList $l, LinerList $acc): LinearList
   }
+  class Nil
+  Cons -u-|> LinearList
+  Nil -u-|> LinearList
 }
 
-package item {
-  class Item {
-    - Id
-    - Name
-  }
-}
+newpage
 
-Group -r-> "*" User
-User -d-> Status
-User -r-> "*" Item
+title Monadic container type which represents a value of two possible types.
+
+package Either {
+  abstract Either {
+    {abstract} map($f): Either
+    {abstract} flatMap($f): Either
+    {static} ap(Either $e1, Either $e2, Either $e3, $f): Either
+  }
+
+  Right -u-|> Either
+  Left -u-|> Either
+}
 
 @enduml
