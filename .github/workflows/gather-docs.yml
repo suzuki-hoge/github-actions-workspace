@@ -1,0 +1,19 @@
+name: generate-documents-index
+on: [push]
+jobs:
+  gather-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+        - run: echo '# Documents' > docs/index.md
+        - run: echo '## Architecture Decision Records' >> docs/index.md
+        - run: find docs/adr -name '*.md' | cut -c 10- | xargs -Ipath echo "+ [path](./adr/path)" >> docs/index.md
+        - run: echo '## Coding Rules' >> docs/index.md
+        - run: find docs/note -name '*.md' | cut -c 11- | xargs -Ipath echo "+ [path](./note/path)" >> docs/index.md
+        - run: echo '## Class Diagrams' >> docs/index.md
+        - run: find docs/class -name '*.png' | cut -c 12- | xargs -Ipath echo "![path](https://raw.githubusercontent.com/suzuki-hoge/github-actions-workspace/gh-pages/docs/class/path)" >> docs/index.md
+        - uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: .
+
