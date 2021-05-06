@@ -1,0 +1,54 @@
+@startuml
+
+title Monadic container type which represents an optional value.
+
+package Option {
+  interface Option {
+    + map($f): Option
+    + filter($p): Option
+    + flatMap($f): Option
+  }
+
+  Some -u-|> Option
+  None -u-|> Option
+}
+
+newpage
+
+title Monadic container type which represents a sequence of elements.
+
+package LinearList {
+  abstract LinearList {
+    {abstract} + map($f): LinearList
+    {abstract} + filter($p): LinearList
+    {abstract} + flatMap($f): LinearList
+    {abstract} + prepend($f): LinearList
+    {static} + of(array $vs): LinearList
+    {static} + empty(): LinearList
+  }
+
+  class Cons {
+    {static} - rec($f, LinerList $l, LinerList $acc): LinearList
+    {static} - reverse(LinerList $l, LinerList $acc): LinearList
+  }
+  class Nil
+  Cons -u-|> LinearList
+  Nil -u-|> LinearList
+}
+
+newpage
+
+title Monadic container type which represents a value of two possible types.
+
+package Either {
+  abstract Either {
+    {abstract} map($f): Either
+    {abstract} flatMap($f): Either
+    {static} ap(Either $e1, Either $e2, Either $e3, $f): Either
+  }
+
+  Right -u-|> Either
+  Left -u-|> Either
+}
+
+@enduml
